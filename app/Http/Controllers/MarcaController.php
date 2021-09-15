@@ -21,7 +21,7 @@ class MarcaController extends Controller
     {
         //$marcas = Marca::all();
         $marcas = $this->marca->all();
-        return $marcas;
+        return response()->json($marcas, 200);
     }
 
 
@@ -35,7 +35,7 @@ class MarcaController extends Controller
     {
         //$marca = Marca::create($request->all());
         $marca = $this->marca->create($request->all());
-        return $marca;
+        return response()->json($marca,201);
     }
 
     /**
@@ -48,9 +48,9 @@ class MarcaController extends Controller
     {
         $marca = $this->marca->find($id);
         if($marca === null){
-            return ['erro' => 'Recurso perquisado não existe!'];
+            return response()->json(['erro' => 'Recurso perquisado não existe!'], 404);
         }
-        return $marca;
+        return response()->json($marca,200);
     }
 
     /**
@@ -65,10 +65,10 @@ class MarcaController extends Controller
         //$marca->update($request->all());
         $marca = $this->marca->find($id);
         if($marca === null){
-            return ['erro' => 'Impossível realizar a atualização, recurso solicitado não existe!'];
+            return response()->json(['erro' => 'Impossível realizar a atualização, recurso solicitado não existe!'], 404);
         }
         $marca->update($request->all());
-        return $marca;
+        return response()->json($marca, 200);
     }
 
     /**
@@ -81,9 +81,9 @@ class MarcaController extends Controller
     {
         $marca = $this->marca->find($id);
         if($marca === null){
-            return ['erro' => 'Não foi possível excluir, recurso inexistente!'];
+            return response()->json(['erro' => 'Não foi possível excluir, recurso inexistente!'], 404);
         }
         $marca->delete();
-        return ['msg' => 'A marca foi deletada com sucesso!'];
+        return response()->json(['msg' => 'A marca foi deletada com sucesso!'], 200);
     }
 }
