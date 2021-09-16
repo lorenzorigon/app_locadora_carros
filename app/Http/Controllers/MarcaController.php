@@ -33,7 +33,9 @@ class MarcaController extends Controller
      */
     public function store(Request $request)
     {
-        //$marca = Marca::create($request->all());
+        
+        $request->validate($this->marca->rules(), $this->marca->feedback());
+
         $marca = $this->marca->create($request->all());
         return response()->json($marca,201);
     }
@@ -67,6 +69,9 @@ class MarcaController extends Controller
         if($marca === null){
             return response()->json(['erro' => 'Impossível realizar a atualização, recurso solicitado não existe!'], 404);
         }
+
+        $request->validate($marca->rules(), $marca->feedback());
+
         $marca->update($request->all());
         return response()->json($marca, 200);
     }
