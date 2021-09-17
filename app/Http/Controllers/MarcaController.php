@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use App\Models\Marca;
 use Illuminate\Http\Request;
 
@@ -95,7 +96,17 @@ class MarcaController extends Controller
             $request->validate($marca->rules(), $marca->feedback());
         }
 
-        $marca->update($request->all());
+        if($request->file('imagem')){
+            Storage::disk('public')->delete($marca->imagem);
+        }
+
+        $image = $request->file('imagem');
+        $imagem_urn = $image->store('imagens', 'public');
+
+        $marca->update([
+            'nome' => $request->nome,
+            'imagem' => $imagem_urn
+        ]);
         return response()->json($marca, 200);
     }
 
@@ -111,6 +122,10 @@ class MarcaController extends Controller
         if($marca === null){
             return response()->json(['erro' => 'Não foi possível excluir, recurso inexistente!'], 404);
         }
+
+        Storage::disk('public')->delete($marca->imagem);
+
+        
         $marca->delete();
         return response()->json(['msg' => 'A marca foi deletada com sucesso!'], 200);
     }
