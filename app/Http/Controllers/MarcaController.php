@@ -101,10 +101,15 @@ class MarcaController extends Controller
         $image = $request->file('imagem');
         $imagem_urn = $image->store('imagens', 'public');
 
-        $marca->update([
+        $marca->fill($request->all());
+        $marca->imagem = $imagem_urn;
+        $marca->save();
+
+        /*$marca->update([
             'nome' => $request->nome,
             'imagem' => $imagem_urn
-        ]);
+        ]);*/
+        
         return response()->json($marca, 200);
     }
 
